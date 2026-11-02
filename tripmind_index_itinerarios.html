@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101a2b">
+  <meta name="description" content="TripMind Discover encuentra ideas de viaje adaptadas a tu presupuesto, tiempo y forma de viajar.">
+  <title>TripMind — Descubre a dónde puedes ir</title>
+  <style>
+    :root{--bg:#0b1220;--surface:#121e30;--surface2:#19283e;--line:#2a3b54;--text:#f5f7fb;--muted:#a8b5c8;--mint:#9af0c9;--mint-dark:#143e35;--blue:#9fc4ff;--gold:#f2d49a}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(900px 500px at 85% -10%,#263d5c 0%,transparent 60%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    a{color:inherit}
+    .wrap{width:min(1080px,calc(100% - 40px));margin:auto}
+    header{height:76px;display:flex;align-items:center;justify-content:space-between}
+    .brand{font-size:22px;font-weight:850;letter-spacing:-1px;text-decoration:none}.brand b{color:var(--mint)}
+    .nav{display:flex;gap:24px;color:var(--muted);font-size:13px}.nav a{text-decoration:none}
+    .nav a:hover{color:var(--mint)}
+    .hero{padding:68px 0 38px}
+    .kicker{color:var(--mint);font-size:11px;letter-spacing:2.2px;font-weight:800;text-transform:uppercase}
+    h1{font-size:clamp(42px,7vw,72px);line-height:.99;letter-spacing:-3.5px;max-width:780px;margin:18px 0}
+    .hero p{max-width:650px;color:var(--muted);font-size:17px;line-height:1.7;margin:0}
+    .hero strong{color:var(--text)}
+    .layout{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:stretch;padding:20px 0 64px}
+    .panel{background:linear-gradient(145deg,rgba(25,40,62,.97),rgba(17,29,47,.97));border:1px solid var(--line);border-radius:22px;padding:25px;box-shadow:0 18px 60px #0002}
+    .panel h2{font-size:20px;letter-spacing:-.5px;margin:0 0 7px}
+    .hint{font-size:13px;line-height:1.55;color:var(--muted);margin:0 0 20px}
+    label{display:block;font-size:12px;font-weight:700;color:#dce5f1;margin:16px 0 8px}
+    input,select{display:block;width:100%;height:47px;border:1px solid #3a4b65;border-radius:11px;background:#0c1728;color:var(--text);padding:0 13px;font:inherit;font-size:14px;outline:none}
+    input:focus,select:focus{border-color:var(--mint);box-shadow:0 0 0 3px #9af0c91a}
+    .fields{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{appearance:none;border:1px solid #3a4b65;background:#0c1728;color:#d6dfeb;padding:9px 12px;border-radius:99px;font-size:12px;cursor:pointer}
+    .chip[aria-pressed="true"]{background:var(--mint-dark);border-color:var(--mint);color:var(--mint)}
+    .primary{display:block;width:100%;border:0;border-radius:12px;background:var(--mint);color:#092219;font-weight:850;font-size:14px;padding:16px;margin-top:22px;cursor:pointer}
+    .primary:hover{filter:brightness(1.06)}
+    .fine{font-size:10px;line-height:1.55;color:#8797ad;margin:12px 0 0}
+    .visual{min-height:100%;display:flex;flex-direction:column}
+    .landscape{height:205px;position:relative;overflow:hidden;border-radius:16px;margin:12px 0 19px;background:linear-gradient(155deg,#315e68,#263f5e 58%,#a3a879)}
+    .sun{position:absolute;width:65px;height:65px;border-radius:50%;background:#f4dfad;right:18%;top:28px;box-shadow:0 0 50px #f4dfad66}
+    .mountain{position:absolute;bottom:-2px;width:0;height:0;border-left:180px solid transparent;border-right:180px solid transparent;border-bottom:145px solid #203c42}
+    .m1{left:-55px}.m2{left:120px;border-left-width:220px;border-right-width:220px;border-bottom:185px solid #172e38}
+    .hill{position:absolute;bottom:-65px;right:-25px;width:390px;height:145px;border-radius:50%;background:#132d32;transform:rotate(-9deg)}
+    .benefits{display:grid;gap:0;margin-top:auto}
+    .benefit{padding:14px 0;border-top:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+    .benefit i{font-style:normal;color:var(--mint);font-size:17px}
+    .benefit strong{display:block;font-size:13px;margin-bottom:4px}
+    .benefit span{display:block;font-size:12px;color:var(--muted);line-height:1.45}
+    #results{display:none;padding:0 0 70px}
+    .results-top{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:17px}
+    .results-top h2{font-size:27px;letter-spacing:-1px;margin:7px 0 0}
+    .demo{font-size:10px;letter-spacing:.6px;color:var(--gold);border:1px solid #705b36;border-radius:99px;padding:7px 10px;white-space:nowrap}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+    .destination{background:var(--surface);border:1px solid var(--line);border-radius:17px;padding:19px;min-width:0}
+    .destination .type{font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:1px;font-weight:800}
+    .destination h3{font-size:21px;margin:9px 0 7px}
+    .destination p{font-size:12px;line-height:1.55;color:var(--muted);min-height:56px;margin:0}
+    .estimate{font-size:24px;color:var(--mint);font-weight:850;margin:15px 0 3px}
+    .per{font-size:10px;color:#8999af}
+    .breakdown{border-top:1px solid var(--line);margin-top:15px;padding-top:12px;font-size:11px;color:var(--muted);line-height:1.8}
+    .reset{border:1px solid var(--line);background:transparent;color:var(--text);padding:10px 14px;border-radius:10px;font-size:12px;cursor:pointer}
+    footer{border-top:1px solid #26364d;padding:23px 0 35px;color:#8493a9;font-size:11px;line-height:1.6}
+    @media(max-width:760px){.wrap{width:min(100% - 30px,600px)}header{height:65px}.nav{gap:13px;font-size:11px}.hero{padding:48px 0 25px}h1{letter-spacing:-2.4px}.hero p{font-size:15px}.layout{grid-template-columns:1fr;padding-top:12px}.visual{display:none}.panel{padding:20px}.cards{grid-template-columns:1fr}.destination p{min-height:0}.results-top{align-items:flex-start;flex-direction:column}.results-top h2{font-size:24px}}
+  </style>
+</head>
+<body>
+<header class="wrap">
+  <a class="brand" href="#">tripmind<b>.</b></a>
+  <nav class="nav"><a href="#discover">Descubrir</a><a href="#como-funciona">Cómo funciona</a></nav>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="kicker">Viajar empieza con lo que tienes</div>
+    <h1>No busques un destino.<br>Descubre hasta dónde<br>puede llevarte tu presupuesto.</h1>
+    <p>Cuéntanos <strong>cuánto puedes gastar</strong>, desde dónde sales y qué te apetece vivir. Te damos ideas de viajes que encajan con tus condiciones, incluso lugares que no tenías en mente.</p>
+  </section>
+
+  <section class="layout" id="discover">
+    <div class="panel">
+      <h2>Diseña tu próxima escapada</h2>
+      <p class="hint">Solo necesitamos unos datos para empezar. Puedes cambiar las opciones cuando quieras.</p>
+      <form id="planner">
+        <div class="fields">
+          <div><label for="origin">Ciudad de salida</label><input id="origin" name="origin" value="Madrid" autocomplete="address-level2" required></div>
+          <div><label for="budget">Presupuesto total (€)</label><input id="budget" name="budget" type="number" min="50" max="100000" value="600" required></div>
+          <div><label for="people">Número de viajeros</label><select id="people"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div>
+          <div><label for="days">Días de viaje</label><select id="days"><option>2</option><option>3</option><option>4</option><option selected>5</option><option>6</option><option>7</option><option>8</option><option>10</option><option>14</option></select></div>
+        </div>
+        <label for="period">Cuándo te gustaría viajar</label>
+        <select id="period"><option>Fechas flexibles</option><option>Este mes</option><option>El próximo mes</option><option>En primavera</option><option>En verano</option><option>En otoño</option><option>En invierno</option></select>
+        <label>¿Qué tipo de experiencia te apetece?</label>
+        <div class="chips" id="preferences">
+          <button class="chip" type="button" aria-pressed="true">Naturaleza</button>
+          <button class="chip" type="button" aria-pressed="false">Playa</button>
+          <button class="chip" type="button" aria-pressed="false">Montaña</button>
+          <button class="chip" type="button" aria-pressed="false">Ciudades</button>
+          <button class="chip" type="button" aria-pressed="false">Aventura</button>
+          <button class="chip" type="button" aria-pressed="false">Tranquilidad</button>
+          <button class="chip" type="button" aria-pressed="false">Cultura</button>
+          <button class="chip" type="button" aria-pressed="false">Gastronomía</button>
+        </div>
+        <button class="primary" type="submit">Encontrar ideas de viaje <span aria-hidden="true">→</span></button>
+        <p class="fine">La IA propone destinos según tus preferencias. No consulta precios ni disponibilidad en tiempo real.</p>
+      </form>
+    </div>
+
+    <aside class="panel visual" id="como-funciona">
+      <h2>Una forma distinta de planificar</h2>
+      <p class="hint">Primero tus posibilidades. Después, el destino.</p>
+      <div class="landscape" role="img" aria-label="Ilustración de montañas al atardecer">
+        <div class="sun"></div><div class="mountain m1"></div><div class="mountain m2"></div><div class="hill"></div>
+      </div>
+      <div class="benefits">
+        <div class="benefit"><i>✦</i><div><strong>Descubrimiento por presupuesto</strong><span>Ideas que parten de tus límites, no de una lista de destinos populares.</span></div></div>
+        <div class="benefit"><i>⌁</i><div><strong>Comparación sencilla</strong><span>Varias alternativas para valorar qué experiencia te compensa más.</span></div></div>
+        <div class="benefit"><i>✓</i><div><strong>Transparencia</strong><span>La versión completa distinguirá precios verificados de estimaciones.</span></div></div>
+      </div>
+    </aside>
+  </section>
+
+  <section id="results" aria-live="polite">
+    <div class="results-top">
+      <div><div class="kicker">Tus ideas iniciales</div><h2>Podrías empezar por aquí</h2></div>
+      <span class="demo" id="resultMode">GENERADO CON IA</span>
+    </div>
+    <div class="cards" id="cards"></div>
+    <p class="fine">TripMind no consulta todavía vuelos, alojamientos ni disponibilidad. Las recomendaciones son orientativas; comprueba los costes antes de reservar.</p>
+    <button class="reset" id="edit">← Modificar mi búsqueda</button>
+  </section>
+</main>
+
+<footer><div class="wrap">TripMind Discover · Prototipo inicial · Sin reservas ni precios en tiempo real.</div></footer>
+
+<script>
+(() => {
+  const API_URL = "https://tripmind-ai.hectorgutiezmartinez.workers.dev/";
+  const preferenceButtons = [...document.querySelectorAll(".chip")];
+  let lastTripData = null;
+
+  preferenceButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const active = button.getAttribute("aria-pressed") === "true";
+      button.setAttribute("aria-pressed", String(!active));
+    });
+  });
+
+  const form = document.getElementById("planner");
+  const submitButton = form.querySelector('button[type="submit"]');
+  const results = document.getElementById("results");
+  const cards = document.getElementById("cards");
+
+  function addText(parent, tag, text, className) {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    el.textContent = text || "";
+    parent.append(el);
+    return el;
+  }
+
+  async function requestAI(payload) {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "No se ha podido conectar con la IA.");
+    return data;
+  }
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    lastTripData = {
+      origin: document.getElementById("origin").value.trim(),
+      budget: Number(document.getElementById("budget").value),
+      people: Number(document.getElementById("people").value),
+      days: Number(document.getElementById("days").value),
+      period: document.getElementById("period").value,
+      preferences: preferenceButtons
+        .filter(b => b.getAttribute("aria-pressed") === "true")
+        .map(b => b.textContent.trim())
+    };
+
+    if (!lastTripData.origin || !Number.isFinite(lastTripData.budget) || lastTripData.budget < 50 ||
+        !Number.isInteger(lastTripData.people) || lastTripData.people < 1 ||
+        !Number.isInteger(lastTripData.days) || lastTripData.days < 1) {
+      alert("Revisa la ciudad de salida, el presupuesto, los viajeros y los días.");
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = "La IA está buscando destinos…";
+    cards.replaceChildren();
+    results.style.display = "block";
+    document.getElementById("resultMode").textContent = "CONSULTANDO IA";
+    addText(cards, "p", "Estamos analizando tus preferencias y preparando tres ideas. Puede tardar unos segundos.", "hint");
+    results.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    try {
+      const data = await requestAI({ ...lastTripData, action: "discover" });
+      cards.replaceChildren();
+      addText(cards, "p", data.intro || "Estas son tus tres ideas de viaje.", "hint");
+
+      data.destinations.forEach(place => {
+        const card = document.createElement("article");
+        card.className = "destination";
+        addText(card, "div", place.type || "Destino recomendado", "type");
+        addText(card, "h3", place.name || "Destino");
+        addText(card, "p", place.description || "");
+        addText(card, "div", "Por qué encaja: " + (place.why || "Según tus preferencias."), "breakdown");
+        addText(card, "div", "Presupuesto: " + (place.budget_note || "Comprueba los costes antes de reservar."), "breakdown");
+
+        const itineraryButton = document.createElement("button");
+        itineraryButton.type = "button";
+        itineraryButton.className = "button";
+        itineraryButton.textContent = "Crear mi itinerario →";
+        itineraryButton.addEventListener("click", () => createItinerary(place.name, itineraryButton));
+        card.append(itineraryButton);
+        cards.append(card);
+      });
+
+      document.getElementById("resultMode").textContent = "GENERADO CON IA";
+    } catch (error) {
+      cards.replaceChildren();
+      addText(cards, "p", "No hemos podido generar los destinos: " + error.message, "hint");
+      document.getElementById("resultMode").textContent = "ERROR DE CONEXIÓN";
+    } finally {
+      submitButton.disabled = false;
+      submitButton.innerHTML = 'Encontrar ideas de viaje <span aria-hidden="true">→</span>';
+    }
+  });
+
+  async function createItinerary(destination, button) {
+    if (!lastTripData) return;
+    button.disabled = true;
+    button.textContent = "Creando itinerario…";
+    const panel = document.createElement("section");
+    panel.className = "itinerary-panel";
+    panel.style.cssText = "margin-top:18px;padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--surface2)";
+    panel.setAttribute("aria-live", "polite");
+    const oldPanel = document.getElementById("itinerary-result");
+    if (oldPanel) oldPanel.remove();
+    panel.id = "itinerary-result";
+    panel.textContent = "TripMind está organizando tu viaje día por día…";
+    button.closest(".destination").append(panel);
+
+    try {
+      const data = await requestAI({
+        ...lastTripData,
+        action: "itinerary",
+        destination
+      });
+      panel.replaceChildren();
+      addText(panel, "h3", "Tu viaje a " + (data.destination || destination));
+      addText(panel, "p", data.intro || "Tu itinerario personalizado.");
+      addText(panel, "h4", "Presupuesto orientativo");
+      if (data.budget) {
+        const budgetList = document.createElement("ul");
+        ["transport", "accommodation", "food", "activities", "total"].forEach(key => {
+          if (data.budget[key]) addText(budgetList, "li",
+            ({transport:"Transporte", accommodation:"Alojamiento", food:"Comida", activities:"Actividades", total:"Total"}[key]) + ": " + data.budget[key]);
+        });
+        panel.append(budgetList);
+      }
+      addText(panel, "h4", "Plan día por día");
+      (data.days || []).forEach(day => {
+        const dayBox = document.createElement("div");
+        dayBox.style.cssText = "padding:14px 0;border-top:1px solid var(--line)";
+        addText(dayBox, "h4", "Día " + day.day + " · " + (day.title || ""));
+        if (day.morning) addText(dayBox, "p", "☀️ Mañana: " + day.morning);
+        if (day.afternoon) addText(dayBox, "p", "🌤️ Tarde: " + day.afternoon);
+        if (day.evening) addText(dayBox, "p", "🌙 Noche: " + day.evening);
+        if (day.tips) addText(dayBox, "p", "Consejo: " + day.tips);
+        panel.append(dayBox);
+      });
+      addText(panel, "p", "Las cifras son estimaciones orientativas, no precios ni disponibilidad confirmados.", "hint");
+      button.textContent = "Itinerario creado ✓";
+    } catch (error) {
+      panel.textContent = "No se ha podido crear el itinerario: " + error.message;
+      button.disabled = false;
+      button.textContent = "Reintentar itinerario →";
+    }
+  }
+
+  const editButton = document.getElementById("edit");
+  if (editButton) editButton.addEventListener("click", () => {
+    document.getElementById("discover").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+})();
+</script>
+</body>
+</html>
